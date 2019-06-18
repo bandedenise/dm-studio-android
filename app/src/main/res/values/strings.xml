@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Dm Studio</string>
+    <string name="navigation_drawer_open">Menu</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="nav_header_title">Dm Studio</string>
+    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_desc">Menu</string>
+    <string name="action_settings">Opciones</string>
+</resources>
