@@ -5,6 +5,8 @@
 
         <item
             android:id="@+id/clases"
-            android:icon="@drawable/ic_menu_gallery"
             android:title="Clases" />
+        <item
+            android:id="@+id/contacto"
+            android:title="Contactanos" />
 </menu>

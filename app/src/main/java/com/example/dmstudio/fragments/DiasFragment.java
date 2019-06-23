@@ -26,6 +26,7 @@ public class DiasFragment extends Fragment implements View.OnClickListener {
         v.findViewById(R.id.viernes).setOnClickListener(this);
         v.findViewById(R.id.sabado).setOnClickListener(this);
         v.findViewById(R.id.domingo).setOnClickListener(this);
+        getActivity().setTitle("Grilla de clases");
 
         return v;
     }

@@ -1,11 +1,12 @@
-package com.example.dmstudio;
+package com.example.dmstudio.Model;
 
 public class Clase {
 
-    public String horaInicio;
-    public String horaFin;
-    public String nombre;
-    public Boolean enBlanco;
+    private String horaInicio;
+    private String horaFin;
+    private String nombre;
+    private String profesor;
+    private Boolean enBlanco;
 
     public String getHoraInicio() {
         return horaInicio;
@@ -37,5 +38,13 @@ public class Clase {
 
     public void setEnBlanco(Boolean enBlanco) {
         this.enBlanco = enBlanco;
+    }
+
+    public String getProfesor() {
+        return profesor;
+    }
+
+    public void setProfesor(String profesor) {
+        this.profesor = profesor;
     }
 }

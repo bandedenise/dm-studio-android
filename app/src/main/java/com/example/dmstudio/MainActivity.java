@@ -1,6 +1,7 @@
 package com.example.dmstudio;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -8,10 +9,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.dmstudio.fragments.ContactoFragment;
 import com.example.dmstudio.fragments.DiasFragment;
-import com.example.dmstudio.fragments.HorariosFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         DiasFragment firstFragment = new DiasFragment();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.flDias, firstFragment);
+        ft.add(R.id.flMain, firstFragment);
         ft.commit();
     }
 
@@ -53,6 +55,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        Fragment fragment = null;
+
+        if (id == R.id.clases) {
+            DiasFragment diasFragment = new DiasFragment();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flMain, diasFragment);
+            ft.commit();
+
+        } else if (id == R.id.contacto) {
+            ContactoFragment contactoFragment = new ContactoFragment();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flMain, contactoFragment);
+            ft.commit();
+
+            // ARREGLAR
+            FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
+            ft2.replace(R.id.flHorarios, new Fragment());
+            ft2.commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
