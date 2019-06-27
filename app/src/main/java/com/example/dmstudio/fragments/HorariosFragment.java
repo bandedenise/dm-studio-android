@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.dmstudio.GetJsonClases;
 import com.example.dmstudio.Model.Clase;
 import com.example.dmstudio.R;
 
@@ -28,88 +29,64 @@ import java.util.concurrent.TimeUnit;
 
 public class HorariosFragment extends Fragment {
     public static final String horarioComienzo = "10:00";
+    public static final String l = "Lunes";
+    public static final String m = "Martes";
+    public static final String x = "Miercoles";
+    public static final String j = "Jueves";
+    public static final String v = "Viernes";
+    public static final String s = "Sabado";
+    public static final String d = "Domingo";
 
+    public View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_horarios, container, false);
+        view = inflater.inflate(R.layout.fragment_horarios, container, false);
 
         Bundle args = getArguments();
         String dia = args.getString("dia");
-        List<Clase> clasesDefinitivas = new ArrayList<>();
-        List<Clase> clases = new ArrayList<>();
-        DateFormat sdf = new SimpleDateFormat("HH:mm");
-        LinearLayout mainLayout = v.findViewById(R.id.containerClases);
 
         switch (dia) {
             case "L":
-                getActivity().setTitle("Lunes");
+                new GetJsonClases(this, l).execute();
+                getActivity().setTitle(l);
 
-                Clase c = new Clase();
-                c.setHoraInicio("13:30");
-                c.setHoraFin("14:30");
-                c.setNombre("Clase 1");
-                c.setProfesor("Denise");
-
-                Clase c1 = new Clase();
-                c1.setHoraInicio("18:00");
-                c1.setHoraFin("19:30");
-                c1.setNombre("Clase 2");
-                c1.setProfesor("Denise");
-
-                Clase c2 = new Clase();
-                c2.setHoraInicio("20:00");
-                c2.setHoraFin("21:00");
-                c2.setNombre("Clase 3");
-                c2.setProfesor("Denise");
-
-                clases.add(c);
-                clases.add(c1);
-                clases.add(c2);
                 break;
             case "M":
-                getActivity().setTitle("Martes");
-
-                Clase c3 = new Clase();
-                c3.setHoraInicio("12:30");
-                c3.setHoraFin("13:00");
-                c3.setNombre("Clase 1");
-                c3.setProfesor("Denise");
-
-                Clase c4 = new Clase();
-                c4.setHoraInicio("14:00");
-                c4.setHoraFin("15:30");
-                c4.setNombre("Clase 2");
-                c4.setProfesor("Denise");
-
-                Clase c5 = new Clase();
-                c5.setHoraInicio("19:30");
-                c5.setHoraFin("20:00");
-                c5.setNombre("Clase 3");
-                c5.setProfesor("Denise");
-
-                clases.add(c3);
-                clases.add(c4);
-                clases.add(c5);
+                new GetJsonClases(this, m).execute();
+                getActivity().setTitle(m);
                 break;
             case "X":
-                getActivity().setTitle("Miercoles");
+                new GetJsonClases(this, x).execute();
+                getActivity().setTitle(x);
                 break;
             case "J":
-                getActivity().setTitle("Jueves");
+                new GetJsonClases(this, j).execute();
+                getActivity().setTitle(j);
                 break;
             case "V":
-                getActivity().setTitle("Viernes");
+                new GetJsonClases(this, v).execute();
+                getActivity().setTitle(v);
                 break;
             case "S":
-                getActivity().setTitle("Sabado");
+                new GetJsonClases(this, s).execute();
+                getActivity().setTitle(s);
                 break;
             case "D":
-                getActivity().setTitle("Domingo");
+                new GetJsonClases(this, d).execute();
+                getActivity().setTitle(d);
                 break;
             default:
                 break;
         }
+
+        return view;
+    }
+
+    public void UpdateClases(List<Clase> clases) {
+        List<Clase> clasesDefinitivas = new ArrayList<>();
+        DateFormat sdf = new SimpleDateFormat("HH:mm");
+        LinearLayout mainLayout = view.findViewById(R.id.containerClases);
 
         if (clases.size() > 0) {
             Long diff = 0L;
@@ -119,7 +96,7 @@ public class HorariosFragment extends Fragment {
                 Date d2 = sdf.parse(horarioComienzo);
                 diff = d1.getTime() - d2.getTime();
             } catch (ParseException e) {
-                e.printStackTrace();
+             e.printStackTrace();
             }
 
             if (diff > 0) {
@@ -132,37 +109,35 @@ public class HorariosFragment extends Fragment {
                 this.agregarLayout(cInicial, mainLayout, sdf, true);
             }
 
-            for (int i = 0; i < clases.size(); i++) {
-                if (i == 0) {
+            for (int i = 0; i < clases.size(); i++){
+                if(i==0){
                     clasesDefinitivas.add(clases.get(i));
-                    this.agregarLayout(clases.get(i), mainLayout, sdf, false);
-                } else {
-                    if (clases.get(i).getHoraInicio() == clases.get(i - 1).getHoraFin()) {
-                        clasesDefinitivas.add(clases.get(i));
+                    this.agregarLayout(clases.get(i),mainLayout,sdf,false);
+                }else{
+                    if(clases.get(i).getHoraInicio()==clases.get(i-1).getHoraFin()){
+                    clasesDefinitivas.add(clases.get(i));
 
-                        this.agregarLayout(clases.get(i), mainLayout, sdf, false);
+                    this.agregarLayout(clases.get(i),mainLayout,sdf,false);
 
-                    } else {
-                        // agrego la clase en blanco para completar el layout
-                        Clase cEnBlanco = new Clase();
+                    }else{
+                    // agrego la clase en blanco para completar el layout
+                    Clase cEnBlanco=new Clase();
 
-                        cEnBlanco.setHoraInicio(clases.get(i - 1).getHoraFin());
-                        cEnBlanco.setHoraFin(clases.get(i).getHoraInicio());
-                        cEnBlanco.setEnBlanco(true);
-                        clasesDefinitivas.add(cEnBlanco);
+                    cEnBlanco.setHoraInicio(clases.get(i-1).getHoraFin());
+                    cEnBlanco.setHoraFin(clases.get(i).getHoraInicio());
+                    cEnBlanco.setEnBlanco(true);
+                    clasesDefinitivas.add(cEnBlanco);
 
-                        this.agregarLayout(cEnBlanco,  mainLayout, sdf, true);
+                    this.agregarLayout(cEnBlanco,mainLayout,sdf,true);
 
-                        clasesDefinitivas.add(clases.get(i));
+                    clasesDefinitivas.add(clases.get(i));
 
-                        // agrego la clase
-                        this.agregarLayout(clases.get(i), mainLayout, sdf, false);
+                    // agrego la clase
+                    this.agregarLayout(clases.get(i),mainLayout,sdf,false);
                     }
                 }
             }
         }
-
-        return v;
     }
 
     public void agregarLayout(Clase c, LinearLayout mainLayout, DateFormat sdf, Boolean blanco) {
@@ -177,7 +152,11 @@ public class HorariosFragment extends Fragment {
             LinearLayout ll = new LinearLayout(getActivity());
             int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS), getResources().getDisplayMetrics());
-            ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, width));
+
+            LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, width);
+            lparams.setMargins(0, 0, 0, 1);
+
+            ll.setLayoutParams(lparams);
 
             TextView tv = new TextView(getActivity());
 
